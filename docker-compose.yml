@@ -1,0 +1,29 @@
+# Planning Poker v2: una sola instancia (el estado de las salas vive en memoria; no escalar réplicas).
+services:
+  poker-planning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: poker-planning:2.0.0
+    container_name: poker-planning
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-3001}:3001"
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      # Gracia (ms) antes de transferir el owner desconectado
+      OWNER_GRACE_MS: "${OWNER_GRACE_MS:-30000}"
+      # true/1 detrás de un reverse proxy de confianza (usa X-Forwarded-For para el rate-limit)
+      TRUST_PROXY: "${TRUST_PROXY:-false}"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
