@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -54,7 +55,8 @@ export function Modal({ labelledBy, onClose, children, className = '' }: Props) 
     };
   }, []);
 
-  return (
+  // Portal a <body>: un ancestro con backdrop-filter/transform (p.ej. el header) no debe recortar el overlay fijo.
+  return createPortal(
     <div
       className="modal-backdrop"
       onMouseDown={(e) => {
@@ -64,6 +66,7 @@ export function Modal({ labelledBy, onClose, children, className = '' }: Props) 
       <div ref={ref} className={`modal ${className}`} role="dialog" aria-modal="true" aria-labelledby={labelledBy} tabIndex={-1}>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

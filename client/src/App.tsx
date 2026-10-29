@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { Room } from './pages/Room';
 import { NotFound } from './pages/NotFound';
 import { roomPath } from './lib/roomCode';
+import { SkinSprite } from './skins/SkinSprite';
 
 /** /room/:id (v1) → /r/:id */
 function LegacyRoomRedirect() {
@@ -18,11 +19,14 @@ function RoomRoute() {
 
 export function App() {
   return (
-    <Routes>
+    <>
+      <SkinSprite />
+      <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/r/:code" element={<RoomRoute />} />
       <Route path="/room/:id" element={<LegacyRoomRedirect />} />
       <Route path="*" element={<NotFound title="Página no encontrada" message="Esta página no existe." />} />
-    </Routes>
+      </Routes>
+    </>
   );
 }

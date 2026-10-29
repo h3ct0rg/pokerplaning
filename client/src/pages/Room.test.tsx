@@ -261,6 +261,22 @@ describe('Room', () => {
     expect(screen.getByText('Moda (mayoría)')).toBeInTheDocument();
   });
 
+  it('"Mi mazo" en la sala aplica la skin a dock y mesa sin enviar nada al servidor', async () => {
+    saveName('Ana');
+    const socket = joinedSocket();
+    renderAt('/r/AB7K9X', socket);
+    act(() => socket.serverEmit('room:state', state()));
+    const before = socket.emitted.length;
+    await userEvent.click(screen.getByRole('button', { name: /Mi mazo/ }));
+    await userEvent.click(screen.getByRole('radio', { name: /Futurista/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Listo' }));
+    expect(screen.getByRole('button', { name: 'Votar 8' })).toHaveClass('skin-futuristic');
+    const seats = within(screen.getByRole('list', { name: 'Participantes en la mesa' }));
+    expect(seats.getByRole('img', { name: 'Voto oculto' })).toHaveClass('skin-futuristic');
+    expect(socket.emitted.length).toBe(before);
+    expect(window.localStorage.getItem('pp.skin')).toBe('futuristic');
+  });
+
   it('toast al cambiar el host', () => {
     saveName('Ana');
     const socket = joinedSocket();

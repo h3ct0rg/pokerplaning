@@ -8,6 +8,7 @@ import { parseRoomInput, roomPath } from '../lib/roomCode';
 import { NameField } from '../components/NameForm';
 import { Logo } from '../components/Logo';
 import { Card } from '../components/Card';
+import { SkinPicker } from '../components/SkinPicker';
 
 const CREATE_TIMEOUT_MS = 8000;
 type Tab = 'create' | 'join';
@@ -195,7 +196,10 @@ export function Home({ initialTab = 'create' }: { initialTab?: Tab }) {
                   <h2 id="preview-title" className="eyebrow">
                     Previsualización de cartas en mano
                   </h2>
-                  <span className="mono muted small">{DECKS[deckId].length} cartas</span>
+                  <span className="section-head-end">
+                    <span className="mono muted small">{DECKS[deckId].length} cartas</span>
+                    <SkinPicker />
+                  </span>
                 </div>
                 <div className="hand hand-preview-cards" role="group" aria-label="Previsualización (no vota)">
                   {DECKS[deckId].map((v) => (

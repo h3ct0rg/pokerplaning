@@ -5,6 +5,7 @@ import { formatDuration } from '../lib/time';
 import { initials } from '../lib/initials';
 import { ConnectionIndicator } from './ConnectionIndicator';
 import { Logo } from './Logo';
+import { SkinPicker } from './SkinPicker';
 
 interface Props {
   room: RoomState;
@@ -69,6 +70,7 @@ export function Header({ room, elapsedMs, status, onShare, onToggleSpectator, on
           </span>
         )}
         <div className="header-spacer" />
+        <SkinPicker />
         <button
           type="button"
           className={`btn btn-ghost btn-sm${spectator ? ' is-active' : ''}`}
